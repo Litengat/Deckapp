@@ -6,10 +6,7 @@
         xmlns:local="clr-namespace:Deckapp"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Slider x:Name="testSlider" Minimum="0" Maximum="1" ValueChanged="Slider_ValueChanged" HorizontalAlignment="Left" Margin="45,61,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox Name="testSelect" HorizontalAlignment="Left" SelectedIndex="0" SelectionChanged="testSelect_SelectionChanged" Margin="45,22,0,0" VerticalAlignment="Top" Width="120"/>
-        <ProgressBar Name="MasterVolume" Minimum="0" Maximum="1" HorizontalAlignment="Left" Height="10" Margin="45,89,0,0" VerticalAlignment="Top" Width="120"/>
-
-    </Grid>
+    <Canvas x:Name="MainCanvas">
+        
+    </Canvas>
 </Window>

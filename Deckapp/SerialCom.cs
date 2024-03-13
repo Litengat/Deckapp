@@ -1,22 +1,21 @@
 ﻿using System;
-using System.IO.Ports;  
-
+using System.IO.Ports;
+using Deckapp;
 
 namespace Deckapp
 {
     class SerialCom
     {
-        SerialPort serialPort;
-        public SerialCom() {
+        static SerialPort serialPort;
+        public static void StartSerialCom() {
             Thread serialConection = new Thread(SerialConection);
             serialConection.Start();
         }
-        public void SerialConection()
+        static void SerialConection()
         {
             SearchCom();
 
             string message;
-            Console.WriteLine("te");
             while (true)
             {
                 if (serialPort.BytesToRead > 0)
@@ -24,14 +23,17 @@ namespace Deckapp
 
                     message = serialPort.ReadLine();
                     string[] subs = message.Split(';');
+                    Console.WriteLine(string.Join(", ", subs));
                     foreach (string s in subs)
                     {
-                        if(s.StartsWith("Fader1"))
+                        if(s.StartsWith("Fader"))
                         {
-                            string[] splited = message.Split(':');
+                            string[] splited = s.Split(':');
                             Int32.TryParse(splited[1], out int volume);
-                            Console.WriteLine(volume);
-                            Deckapp.MainWindow.selectedSession.SimpleAudioVolume.MasterVolume = volume / 100.0F;
+                            Int32.TryParse(splited[0].Remove(0, 5), out int faderid);
+                            
+                            Fader.Faders[faderid].selectedSession.SimpleAudioVolume.MasterVolume = volume /100.0F;
+
                         }
                     }
                 }
@@ -43,7 +45,7 @@ namespace Deckapp
 
 
 
-        public bool SearchCom() {
+        public static bool SearchCom() {
             foreach (string COM in SerialPort.GetPortNames())
             {
                 Console.WriteLine($"SearchCom: {COM}");
@@ -56,7 +58,7 @@ namespace Deckapp
                     Console.WriteLine("Com Error");
                 }
                 serialPort.WriteLine("Hi");
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
                 if (serialPort.BytesToRead > 0)
                 {
                     string message = serialPort.ReadLine();
