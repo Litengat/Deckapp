@@ -1,4 +1,5 @@
 DeckApp
 
 DesktopApp:
-![image](https://github.com/Litengat/Deckapp/assets/107832821/1b79af0f-15ea-4292-a2ee-d7648aefc741)
+
+![image](https://github.com/Litengat/Deckapp/assets/107832821/04065b3c-0ca8-4243-b9db-487cd9a76f52)
