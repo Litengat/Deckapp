@@ -1,13 +1,9 @@
-﻿using CoreAudio;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using CoreAudio;
 
 namespace Deckapp
 {
@@ -27,13 +23,13 @@ namespace Deckapp
             id = Faderid;
             selectedSession = MainWindow.Sessions[id];
 
-            createComboBox();
+            comboBox = createComboBox();
             canvas.Children.Add(comboBox);
-            createImage();
+            image = createImage();
             canvas.Children.Add(image);
-            createSlider();
+            slider = createSlider();
             canvas.Children.Add(slider);
-            createProgressBar();
+            progressBar = createProgressBar();
             canvas.Children.Add(progressBar);
         }
         void Main()
@@ -54,9 +50,9 @@ namespace Deckapp
         }
 
 
-        void createComboBox()
+        ComboBox createComboBox()
         {
-            comboBox = new ComboBox();
+            comboBox = new System.Windows.Controls.ComboBox();
             foreach (var session in MainWindow.Sessions)
             {
                 Process p = Process.GetProcessById((int)session.ProcessID);
@@ -68,8 +64,9 @@ namespace Deckapp
             Canvas.SetTop(comboBox, 20);
             Canvas.SetLeft(comboBox, 75 + id * 200);
             Canvas.SetTop(comboBox, 20);
+            return comboBox;
         }
-        void createImage()
+        Image createImage()
         {
             image = new Image();
             image.Source = ProcessIcons.getIconFromProsses((int)selectedSession.ProcessID);
@@ -77,8 +74,9 @@ namespace Deckapp
             image.Width = 20;
             Canvas.SetLeft(image, 50 + id * 200);
             Canvas.SetTop(image, 20);
+            return image;
         }
-        void createSlider()
+        Slider createSlider()
         {
             slider = new Slider();
             slider.Minimum = 0; slider.Maximum = 1;
@@ -86,8 +84,9 @@ namespace Deckapp
             slider.Width = 120;
             Canvas.SetLeft(slider, 50 + id * 200);
             Canvas.SetTop(slider, 60);
+            return slider;
         }
-        void createProgressBar()
+        ProgressBar createProgressBar()
         {
             progressBar = new ProgressBar();
             progressBar.Minimum = 0; progressBar.Maximum = 1;
@@ -95,6 +94,7 @@ namespace Deckapp
             progressBar.Width = 120;
             Canvas.SetLeft(progressBar, 50 + id * 200);
             Canvas.SetTop(progressBar, 90);
+            return progressBar;
         }
 
 

@@ -1,25 +1,19 @@
-﻿using System.Text;
+﻿using System;
 using System.Windows;
-using System.Drawing;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
 using CoreAudio;
+using System.Collections.Generic;
+using System.Windows.Forms;
 using System.Diagnostics;
-using System.Reflection;
+using System.Numerics;
+
 
 namespace Deckapp
 {
     public partial class MainWindow : Window
     {
-
         public static List<AudioSessionControl2> Sessions = new List<AudioSessionControl2>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,9 +28,9 @@ namespace Deckapp
                 if (!session.IsSystemSoundsSession)
                 {
                     Sessions.Add(session);
+                    Console.WriteLine(Process.GetProcessById((int)session.ProcessID));
                 }
             }
-            
             Fader fader0 = new Fader(MainCanvas, 0);
             Fader.Faders.Add(fader0);
             Fader fader1 = new Fader(MainCanvas, 1);
@@ -46,9 +40,15 @@ namespace Deckapp
             Fader fader3 = new Fader(MainCanvas, 3);
             Fader.Faders.Add(fader3);
 
-            SerialCom.StartSerialCom();
-        }
+            for (int i = 0; i < 12; i++)
+            {
+                DeckButton button = new DeckButton(MainCanvas, i);
+            }
 
+            SendKeys.SendWait("k");
+
+            //SerialCom.StartSerialCom();
+        }
         private void Main(object sender, EventArgs e)
         {
             Fader.allFadersMain();

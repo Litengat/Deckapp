@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Threading;
 using Deckapp;
 
 namespace Deckapp
@@ -52,6 +53,7 @@ namespace Deckapp
                 try {
                     serialPort = new SerialPort(COM, 9600);
                     serialPort.Open();
+                    
                 }
                 catch
                 {
