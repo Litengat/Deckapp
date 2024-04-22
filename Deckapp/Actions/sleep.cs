@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Forms;
 
 namespace Deckapp.Actions
 {
-    class PressKey : Action
+    internal class Sleep : Action
     {
-        string key;
-        public PressKey(string[] args)
-        {
-            key = args[1];
-        }
+        int time;
 
+        public Sleep(string[] args)
+        {
+            time = int.Parse(args[1]);
+        }
         public void run()
         {
-            SendKeys.SendWait(key);
+            Thread.Sleep(time);
         }
     }
 }

@@ -1,28 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using CoreAudio;
 
 namespace Deckapp
 {
-    class Fader
+    class Fader 
     {
         public static List<Fader> Faders = new List<Fader>();
+
 
         public Slider slider;
         public ComboBox comboBox;
         public ProgressBar progressBar;
         public Image image;
-        public AudioSessionControl2 selectedSession;
+        public AudioSessionControl2 selectedSession { get; set; }
         int id;
 
-        public Fader(Canvas canvas, int Faderid) 
+
+        public Fader(Canvas canvas, int Faderid, AudioSessionControl2 session) 
         {
             id = Faderid;
-            selectedSession = MainWindow.Sessions[id];
-
+            selectedSession = session;
             comboBox = createComboBox();
             canvas.Children.Add(comboBox);
             image = createImage();
@@ -40,7 +44,10 @@ namespace Deckapp
                 slider.Value = selectedSession.SimpleAudioVolume.MasterVolume;
             }
         }
-        
+        public void setVolume(float volume)
+        {
+            selectedSession.SimpleAudioVolume.MasterVolume = volume;
+        }
         public static void allFadersMain()
         {
             foreach(Fader fader in Faders)
@@ -48,17 +55,22 @@ namespace Deckapp
                 fader.Main();
             }
         }
+        public static void createFaders(Canvas canva,int count = 4)
+        {
+            string[] FaderValues = Properties.Settings.Default.FaderValues.Split('|', StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < count; i++)
+            {
+                Fader fader = new Fader(canva, i, MainWindow.getSessionByName(FaderValues[i]));
+                Faders.Add(fader);
+            }
+        }
 
 
         ComboBox createComboBox()
         {
             comboBox = new System.Windows.Controls.ComboBox();
-            foreach (var session in MainWindow.Sessions)
-            {
-                Process p = Process.GetProcessById((int)session.ProcessID);
-                comboBox.Items.Add(p.ProcessName);
-            }
-            comboBox.SelectedIndex = id;
+            comboBox.ItemsSource = MainWindow.ProcessNames;
+            comboBox.SelectedIndex = MainWindow.Sessions.IndexOf(selectedSession);
             comboBox.SelectionChanged += ComboBox_SelectionChanged;
             comboBox.Width = 95;
             Canvas.SetTop(comboBox, 20);
@@ -66,6 +78,7 @@ namespace Deckapp
             Canvas.SetTop(comboBox, 20);
             return comboBox;
         }
+
         Image createImage()
         {
             image = new Image();
@@ -105,9 +118,10 @@ namespace Deckapp
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            selectedSession = MainWindow.Sessions[comboBox.SelectedIndex];
+            selectedSession =  MainWindow.Sessions[comboBox.SelectedIndex];
             slider.Value = selectedSession.SimpleAudioVolume.MasterVolume;
             image.Source = ProcessIcons.getIconFromProsses((int)selectedSession.ProcessID);
+            MainWindow.saveFaders();
         }
 
     }

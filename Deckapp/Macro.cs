@@ -25,19 +25,29 @@ namespace Deckapp
             string[] lines = file.Split('\n');
             foreach (string line in lines)
             {
-                Console.WriteLine(line);
                 string[] words = line.Split(' ');
                 if (words[0] == "key")
                 {
-                    Console.WriteLine(words[1]);
-                    pressKey key = new pressKey(words[1]);
-                    actions.Add(key);
+                    actions.Add(new PressKey(words));
+                }
+                if (words[0] == "sleep")
+                {
+                    actions.Add(new Sleep(words));
+                }
+                if (words[0] == "mouse")
+                {
+                    actions.Add( new Mouse(words));
                 }
             }
             this.actions = actions;
         }
 
         public void run()
+        {
+            Thread thread = new Thread(runThread);
+            thread.Start();
+        }
+        public void runThread()
         {
             foreach (Action action in actions)
             {

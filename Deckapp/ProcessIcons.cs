@@ -26,7 +26,6 @@ namespace Deckapp
             Icon appIcon = Icon.ExtractAssociatedIcon(filename);
             Bitmap resized = new Bitmap(appIcon.ToBitmap(), new Size(64, 64));
             toGrayscale(resized);
-            resized.Save("resized.png");
             return BitmapToImageSource(appIcon.ToBitmap());
         }
 
